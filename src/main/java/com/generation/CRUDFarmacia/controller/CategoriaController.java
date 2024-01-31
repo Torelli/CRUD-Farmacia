@@ -43,6 +43,8 @@ public class CategoriaController {
                 .body(repository.save(categoria));
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         Optional<Categoria> categoria = repository.findById(id);
 
@@ -52,6 +54,7 @@ public class CategoriaController {
         repository.deleteById(id);
     }
 
+    @PutMapping
     public ResponseEntity<Categoria> updateCategoria(@Valid @RequestBody Categoria categoria) {
         return repository.findById(categoria.getId())
                 .map(response -> ResponseEntity.status(HttpStatus.OK)
