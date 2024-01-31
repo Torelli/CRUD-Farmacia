@@ -1,5 +1,6 @@
 package com.generation.CRUDFarmacia.controller;
 
+import com.generation.CRUDFarmacia.model.Categoria;
 import com.generation.CRUDFarmacia.model.Produto;
 import com.generation.CRUDFarmacia.repository.CategoriaRepository;
 import com.generation.CRUDFarmacia.repository.ProdutoRepository;
@@ -45,7 +46,10 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<Produto> createProduto(@Valid @RequestBody Produto produto) {
-        if(categoriaRepository.existsById(produto.getCategoria().getId()))
+
+        Optional<Categoria> categoria = Optional.ofNullable(produto.getCategoria());
+
+        if (categoria.isPresent() && categoriaRepository.existsById(produto.getCategoria().getId()))
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(produtoRepository.save(produto));
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inválida", null);
@@ -65,7 +69,10 @@ public class ProdutoController {
     @PutMapping
     public ResponseEntity<Produto> updateProduto(@Valid @RequestBody Produto produto) {
         if (produtoRepository.existsById(produto.getId())) {
-            if (categoriaRepository.existsById(produto.getCategoria().getId()))
+
+            Optional<Categoria> categoria = Optional.ofNullable(produto.getCategoria());
+
+            if (categoria.isPresent() && categoriaRepository.existsById(produto.getCategoria().getId()))
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(produtoRepository.save(produto));
 
