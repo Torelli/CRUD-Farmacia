@@ -1,8 +1,11 @@
 package com.generation.CRUDFarmacia.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tb_categorias")
@@ -14,6 +17,10 @@ public class Categoria {
 
     @NotNull(message = "O atributo título é obrigatório!")
     private String titulo;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("categoria")
+    private List<Produto> produtos;
 
     public Long getId() {
         return id;
